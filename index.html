@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primera Guerra Mundial | El Último Verano de la Paz</title>
+  <meta name="description" content="Recorrido histórico e interactivo sobre el estallido, desarrollo y consecuencias de la Primera Guerra Mundial (1914-1918).">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for historical & UI icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-bg-mode="clean">
+
+  <!-- Reading Progress Bar -->
+  <div id="scroll-progress-container">
+    <div id="scroll-progress-bar"></div>
+  </div>
+
+  <!-- Ambient Sound Floating Toggle -->
+  <div class="audio-control-wrapper">
+    <button id="ambient-audio-btn" class="audio-toggle-btn" title="Activar/Desactivar ambientación sonora histórica (trincheras y lluvia)">
+      <i class="fa-solid fa-volume-xmark" id="audio-icon"></i>
+      <span class="audio-btn-text">Sonido Ambiental</span>
+    </button>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="main-header" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-brand">
+        <span class="brand-crest"><i class="fa-solid fa-feather-pointed"></i></span>
+        <div class="brand-text">
+          <span class="brand-title">1914 — 1918</span>
+          <span class="brand-subtitle">LA GRAN GUERRA</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu" id="navMenu">
+        <a href="#hero" class="nav-link active"><i class="fa-solid fa-compass"></i> Portada</a>
+        <a href="#conceptos" class="nav-link"><i class="fa-solid fa-book-bookmark"></i> Conceptos Clave</a>
+        <a href="#crisis-1914" class="nav-link"><i class="fa-solid fa-timeline"></i> Crisis de 1914</a>
+        <a href="#alianzas" class="nav-link"><i class="fa-solid fa-shield-halved"></i> Alianzas</a>
+        <a href="#trincheras" class="nav-link"><i class="fa-solid fa-person-rifle"></i> Trincheras</a>
+        <a href="#consecuencias" class="nav-link"><i class="fa-solid fa-monument"></i> Transformaciones</a>
+        <a href="#trivia" class="nav-link"><i class="fa-solid fa-award"></i> Desafío</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Switch between clean optimized background and original image -->
+        <button id="bg-switch-btn" class="bg-mode-pill" title="Alternar entre fondo limpio HD o captura original">
+          <i class="fa-regular fa-image"></i>
+          <span id="bg-mode-label">Fondo Limpio</span>
+        </button>
+        <button class="nav-toggle-btn" id="navToggle" aria-label="Abrir menú de navegación">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==============================================
+         SECCIÓN 1: HERO (Recreación exacta Imagen 1)
+         ============================================== -->
+    <section id="hero" class="hero-section">
+      <!-- Background layers -->
+      <div class="hero-bg-layer" id="heroBgLayer"></div>
+      <div class="hero-atmosphere-smoke"></div>
+      <div class="hero-grain-overlay"></div>
+
+      <div class="hero-content-wrapper">
+        <div class="hero-content-inner">
+          
+          <!-- Category Header with Crimson Lines -->
+          <div class="hero-category-badge">
+            <span class="category-line"></span>
+            <span class="category-text">PRIMERA GUERRA MUNDIAL</span>
+            <span class="category-line"></span>
+          </div>
+
+          <!-- Main Monumental Title -->
+          <h1 class="hero-title">
+            EL ÚLTIMO VERANO<br>
+            DE LA PAZ
+          </h1>
+
+          <!-- Historical Inquiry Subtitle -->
+          <p class="hero-subtitle">
+            ¿Cómo y por qué una crisis europea en 1914 se convirtió en una guerra mundial, y qué transformaciones provocó?
+          </p>
+
+          <!-- Decorative historical ornament separator -->
+          <div class="hero-ornament">
+            <svg width="180" height="18" viewBox="0 0 180 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 9H65M115 9H180" stroke="#8b2323" stroke-width="1.2" opacity="0.7"/>
+              <circle cx="90" cy="9" r="4" fill="#8b2323" />
+              <circle cx="78" cy="9" r="2.5" fill="#8b2323" opacity="0.6"/>
+              <circle cx="102" cy="9" r="2.5" fill="#8b2323" opacity="0.6"/>
+            </svg>
+          </div>
+
+          <!-- Primary Call to Action -->
+          <div class="hero-cta-container">
+            <a href="#conceptos" class="hero-btn-primary" id="btnIniciarRecorrido">
+              <span>INICIAR RECORRIDO</span>
+              <span class="btn-arrow"><i class="fa-solid fa-arrow-right-long"></i></span>
+            </a>
+          </div>
+
+          <!-- Contextual Meta Pills -->
+          <div class="hero-meta-strip">
+            <span class="meta-pill"><i class="fa-regular fa-calendar-days"></i> Verano de 1914</span>
+            <span class="meta-pill"><i class="fa-solid fa-earth-europe"></i> Europa y el Mundo</span>
+            <span class="meta-pill"><i class="fa-solid fa-hourglass-half"></i> 1914 — 1918</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Scroll down indicator -->
+      <a href="#conceptos" class="hero-scroll-cue" aria-label="Desplazarse a la siguiente sección">
+        <span class="cue-label">Explorar</span>
+        <div class="mouse-icon">
+          <div class="wheel"></div>
+        </div>
+      </a>
+    </section>
+
+
+    <!-- ==============================================
+         SECCIÓN 2: ANTES DE COMENZAR (Recreación exacta Imagen 2)
+         ============================================== -->
+    <section id="conceptos" class="section-container conceptos-section">
+      <div class="section-inner">
+        
+        <!-- Header exact from Image 2 -->
+        <div class="section-header-left">
+          <div class="header-pre-tag">FUNDAMENTOS HISTÓRICOS</div>
+          <h2 class="section-title-large">ANTES DE COMENZAR...</h2>
+          <p class="section-intro-text">
+            Algunos conceptos necesarios para comprender la Europa de 1914.
+          </p>
+          <div class="interactive-hint">
+            <i class="fa-solid fa-hand-pointer"></i> Haz clic en cada tarjeta para profundizar en los antecedentes y ejemplos clave de 1914.
+          </div>
+        </div>
+
+        <!-- Cards Grid (2 columns, 3 rows - matching layout) -->
+        <div class="conceptos-grid" id="conceptosGrid">
+          
+          <!-- Card 1: Imperialismo -->
+          <div class="concepto-card" data-concept="imperialismo" tabindex="0">
+            <div class="card-glow"></div>
+            <div class="concepto-card-header">
+              <h3 class="concepto-title">IMPERIALISMO</h3>
+              <span class="card-expand-icon"><i class="fa-solid fa-circle-info"></i></span>
+            </div>
+            <p class="concepto-desc">
+              Expansión del poder de un Estado sobre otros territorios.
+            </p>
+            <div class="card-detail-preview">
+              <span class="detail-tag">Reparto de África</span>
+              <span class="detail-tag">Crisis Marroquíes</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Nacionalismo -->
+          <div class="concepto-card" data-concept="nacionalismo" tabindex="0">
+            <div class="card-glow"></div>
+            <div class="concepto-card-header">
+              <h3 class="concepto-title">NACIONALISMO</h3>
+              <span class="card-expand-icon"><i class="fa-solid fa-circle-info"></i></span>
+            </div>
+            <p class="concepto-desc">
+              Sentimiento de pertenencia y defensa de los intereses de una nación.
+            </p>
+            <div class="card-detail-preview">
+              <span class="detail-tag">Balcanes "El Polvorín"</span>
+              <span class="detail-tag">Panslavismo</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Militarismo -->
+          <div class="concepto-card" data-concept="militarismo" tabindex="0">
+            <div class="card-glow"></div>
+            <div class="concepto-card-header">
+              <h3 class="concepto-title">MILITARISMO</h3>
+              <span class="card-expand-icon"><i class="fa-solid fa-circle-info"></i></span>
+            </div>
+            <p class="concepto-desc">
+              Importancia creciente del poder militar en la política de un Estado.
+            </p>
+            <div class="card-detail-preview">
+              <span class="detail-tag">Paz Armada</span>
+              <span class="detail-tag">Carrera Naval</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Alianza -->
+          <div class="concepto-card" data-concept="alianza" tabindex="0">
+            <div class="card-glow"></div>
+            <div class="concepto-card-header">
+              <h3 class="concepto-title">ALIANZA</h3>
+              <span class="card-expand-icon"><i class="fa-solid fa-circle-info"></i></span>
+            </div>
+            <p class="concepto-desc">
+              Acuerdo entre Estados para cooperar y defender intereses comunes.
+            </p>
+            <div class="card-detail-preview">
+              <span class="detail-tag">Tratados Secretos</span>
+              <span class="detail-tag">Efecto Dominó</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Potencia -->
+          <div class="concepto-card" data-concept="potencia" tabindex="0">
+            <div class="card-glow"></div>
+            <div class="concepto-card-header">
+              <h3 class="concepto-title">POTENCIA</h3>
+              <span class="card-expand-icon"><i class="fa-solid fa-circle-info"></i></span>
+            </div>
+            <p class="concepto-desc">
+              Estado con gran influencia económica, política o militar.
+            </p>
+            <div class="card-detail-preview">
+              <span class="detail-tag">Los Seis Grandes</span>
+              <span class="detail-tag">Hegemonía Mundial</span>
+            </div>
+          </div>
+
+          <!-- Card 6: Movilización -->
+          <div class="concepto-card" data-concept="movilizacion" tabindex="0">
+            <div class="card-glow"></div>
+            <div class="concepto-card-header">
+              <h3 class="concepto-title">MOVILIZACIÓN</h3>
+              <span class="card-expand-icon"><i class="fa-solid fa-circle-info"></i></span>
+            </div>
+            <p class="concepto-desc">
+              Preparación y desplazamiento de las fuerzas militares para la guerra.
+            </p>
+            <div class="card-detail-preview">
+              <span class="detail-tag">Horarios de Trenes</span>
+              <span class="detail-tag">Punto Sin Retorno</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Section Footer with Continuity Button matching Image 2 -->
+        <div class="conceptos-footer-action">
+          <a href="#crisis-1914" class="btn-continuar" id="btnContinuar">
+            <span>Continuar</span>
+            <span class="btn-arrow"><i class="fa-solid fa-arrow-right-long"></i></span>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==============================================
+         MODAL INFORMATIVO PARA CONCEPTOS
+         ============================================== -->
+    <div class="modal-overlay" id="conceptModal" aria-hidden="true" role="dialog">
+      <div class="modal-card">
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Cerrar ventana emergente">&times;</button>
+        <div class="modal-badge" id="modalBadge">CONCEPTO HISTÓRICO</div>
+        <h3 class="modal-title" id="modalTitle">Título del Concepto</h3>
+        <div class="modal-divider"></div>
+        <div class="modal-body" id="modalBody">
+          <!-- Dynamically populated via JS -->
+        </div>
+        <div class="modal-footer">
+          <button class="modal-action-btn" id="modalDismissBtn">Entendido</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==============================================
+         SECCIÓN 3: LA CRISIS DE JULIO DE 1914
+         ============================================== -->
+    <section id="crisis-1914" class="section-container crisis-section">
+      <div class="section-inner">
+        <div class="section-header-center">
+          <span class="section-kicker"><i class="fa-solid fa-fire-flame-curved"></i> LA CHISPA DEL POLVORÍN</span>
+          <h2 class="section-title">La Crisis de Julio de 1914</h2>
+          <p class="section-subtitle">
+            Cómo 37 días de diplomacia fallida, secretos de Estado y rigidez militar precipitaron al continente hacia el abismo.
+          </p>
+        </div>
+
+        <!-- Interactive Timeline Controls -->
+        <div class="timeline-controls">
+          <button class="timeline-nav-btn prev" id="timelinePrevBtn" aria-label="Paso anterior"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+          <div class="timeline-step-indicator" id="timelineStepIndicator">Paso 1 de 6</div>
+          <button class="timeline-nav-btn next" id="timelineNextBtn" aria-label="Paso siguiente">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Interactive Timeline Card Display -->
+        <div class="timeline-slider-wrapper">
+          <div class="timeline-track" id="timelineTrack">
+            
+            <!-- Event 1 -->
+            <div class="timeline-card active" data-step="1">
+              <div class="timeline-date-badge">28 de Junio de 1914</div>
+              <h3 class="timeline-event-title">El Magnicidio de Sarajevo</h3>
+              <div class="timeline-event-location"><i class="fa-solid fa-location-dot"></i> Sarajevo, Bosnia-Herzegovina</div>
+              <p class="timeline-event-text">
+                El archiduque <strong>Francisco Fernando</strong>, heredero al trono austrohúngaro, es asesinado junto a su esposa Sofía por <strong>Gavrilo Princip</strong>, un joven nacionalista serbobosnio vinculado a la sociedad secreta <em>La Mano Negra</em>. El objetivo era liberar a los eslavos del sur de la tutela de Viena y crear una Gran Serbia.
+              </p>
+              <div class="timeline-callout warning">
+                <strong>Consecuencia inmediata:</strong> El gobierno austrohúngaro decide que este acto terrorista es el pretexto ideal para neutralizar definitivamente a Serbia.
+              </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="timeline-card" data-step="2">
+              <div class="timeline-date-badge">5 — 6 de Julio de 1914</div>
+              <h3 class="timeline-event-title">El "Cheque en Blanco" Alemán</h3>
+              <div class="timeline-event-location"><i class="fa-solid fa-location-dot"></i> Berlín y Potsdam, Alemania</div>
+              <p class="timeline-event-text">
+                El Káiser Guillermo II y el canciller alemán Theobald von Bethmann-Hollweg aseguran a Austria-Hungría su <strong>respaldo total e incondicional</strong> ante cualquier acción contra Serbia. Creyeron erróneamente que una acción enérgica y rápida disuadiría a Rusia de intervenir o limitaría el conflicto a una guerra local balcánica.
+              </p>
+              <div class="timeline-callout info">
+                <strong>El error de cálculo:</strong> Alemania dio carta blanca a Viena sin prever que los líderes austríacos tardarían tres semanas en actuar, perdiendo el efecto sorpresa.
+              </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="timeline-card" data-step="3">
+              <div class="timeline-date-badge">23 de Julio de 1914</div>
+              <h3 class="timeline-event-title">El Ultimátum a Serbia</h3>
+              <div class="timeline-event-location"><i class="fa-solid fa-location-dot"></i> Belgrado, Serbia</div>
+              <p class="timeline-event-text">
+                Viena envía un ultimátum con diez exigencias redactadas específicamente para ser inaceptables, dando solo 48 horas para responder. Exigía la participación de funcionarios austríacos en territorio serbio para investigar el complot. Serbia aceptó casi todas las condiciones excepto la que vulneraba su soberanía constitucional.
+              </p>
+              <div class="timeline-callout danger">
+                <strong>Punto crítico:</strong> A pesar de la moderada respuesta serbia, Austria-Hungría rompió de inmediato las relaciones diplomáticas.
+              </div>
+            </div>
+
+            <!-- Event 4 -->
+            <div class="timeline-card" data-step="4">
+              <div class="timeline-date-badge">28 de Julio de 1914</div>
+              <h3 class="timeline-event-title">Declaración de Guerra e Inicio del Conflicto</h3>
+              <div class="timeline-event-location"><i class="fa-solid fa-location-dot"></i> Viena y Belgrado</div>
+              <p class="timeline-event-text">
+                Exactamente un mes después del atentado de Sarajevo, Austria-Hungría declara formalmente la guerra a Serbia y los cañones imperiales bombardean Belgrado. Esta acción rompió la frágil diplomacia internacional y activó el engranaje de alianzas secretas.
+              </p>
+              <div class="timeline-callout warning">
+                <strong>Efecto en cadena:</strong> El zar Nicolás II de Rusia no podía permitir la aniquilación de su protegido eslavo en los Balcanes.
+              </div>
+            </div>
+
+            <!-- Event 5 -->
+            <div class="timeline-card" data-step="5">
+              <div class="timeline-date-badge">30 de Julio — 1 de Agosto de 1914</div>
+              <h3 class="timeline-event-title">La Movilización General y los Relojes de la Guerra</h3>
+              <div class="timeline-event-location"><i class="fa-solid fa-location-dot"></i> San Petersburgo, Berlín y París</div>
+              <p class="timeline-event-text">
+                Rusia decreta la movilización general. En la doctrina militar de 1914, movilizar equivalía a declarar la guerra: los estados mayores creían que quien se movilizara más rápido obtendría la victoria decisiva. Alemania exige a Rusia frenar la movilización; ante la negativa, declara la guerra a Rusia el 1 de agosto y a Francia el 3 de agosto.
+              </p>
+              <div class="timeline-callout info">
+                <strong>La tiranía de los trenes:</strong> Millones de reservistas abordaron miles de trenes bajo planes inflexibles que ningún político pudo detener.
+              </div>
+            </div>
+
+            <!-- Event 6 -->
+            <div class="timeline-card" data-step="6">
+              <div class="timeline-date-badge">4 de Agosto de 1914</div>
+              <h3 class="timeline-event-title">Invasión de Bélgica y la Entrada Británica</h3>
+              <div class="timeline-event-location"><i class="fa-solid fa-location-dot"></i> Bruselas, Londres y el Canal de la Mancha</div>
+              <p class="timeline-event-text">
+                Para derrotar a Francia antes de que Rusia estuviera lista (el célebre <em>Plan Schlieffen</em>), el ejército alemán invade la neutral Bélgica. Este quebranto del tratado de 1839 obliga a Gran Bretaña a declarar la guerra a Alemania. Edward Grey, ministro británico de exteriores, pronuncia su célebre frase: <em>"Las luces se están apagando en toda Europa; no volveremos a verlas encendidas en nuestra vida."</em>
+              </p>
+              <div class="timeline-callout danger">
+                <strong>Guerra Total:</strong> En solo una semana, lo que era una disputa balcánica se convirtió en una conflagración mundial que arrastró a los imperios coloniales.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Timeline Pagination Dots -->
+        <div class="timeline-dots" id="timelineDots">
+          <button class="dot active" data-step="1" title="28 Junio: Magnicidio"></button>
+          <button class="dot" data-step="2" title="5 Julio: Cheque en Blanco"></button>
+          <button class="dot" data-step="3" title="23 Julio: Ultimátum"></button>
+          <button class="dot" data-step="4" title="28 Julio: Declaración de Guerra"></button>
+          <button class="dot" data-step="5" title="1 Agosto: Movilización"></button>
+          <button class="dot" data-step="6" title="4 Agosto: Entrada Británica"></button>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==============================================
+         SECCIÓN 4: LAS ALIANZAS Y EL EQUILIBRIO DE PODER
+         ============================================== -->
+    <section id="alianzas" class="section-container alianzas-section">
+      <div class="section-inner">
+        <div class="section-header-center">
+          <span class="section-kicker"><i class="fa-solid fa-network-wired"></i> EL SISTEMA DE BLOQUES</span>
+          <h2 class="section-title">Las Dos Grandes Alianzas de 1914</h2>
+          <p class="section-subtitle">
+            Cómo el sistema de tratados mutuos convirtió un conflicto regional en una guerra a escala continental e intercontinental.
+          </p>
+        </div>
+
+        <!-- Alliance Interactive Comparison -->
+        <div class="alianzas-comparison-grid">
+          
+          <!-- Triple Entente / Aliados -->
+          <div class="alliance-column entente-col">
+            <div class="alliance-header">
+              <div class="alliance-crest entente"><i class="fa-solid fa-shield-halved"></i></div>
+              <h3 class="alliance-name">LA TRIPLE ENTENTE</h3>
+              <div class="alliance-subname">Los Aliados</div>
+            </div>
+            <p class="alliance-desc">
+              Coalición formada progresivamente para contrarrestar la hegemonía alemana en Europa y defender el equilibrio de poder colonial y naval.
+            </p>
+            
+            <div class="powers-list">
+              <div class="power-item">
+                <span class="power-flag">🇬🇧</span>
+                <div class="power-info">
+                  <strong>Reino Unido</strong>
+                  <span class="power-role">Mayor armada del mundo, vasto imperio ultramarino, dominio financiero.</span>
+                </div>
+              </div>
+              <div class="power-item">
+                <span class="power-flag">🇫🇷</span>
+                <div class="power-info">
+                  <strong>Francia</strong>
+                  <span class="power-role">Fuerte ejército permanente, ansias de recuperar Alsacia y Lorena.</span>
+                </div>
+              </div>
+              <div class="power-item">
+                <span class="power-flag">🇷🇺</span>
+                <div class="power-info">
+                  <strong>Imperio Ruso</strong>
+                  <span class="power-role">El mayor ejército en número (el "rodillo ruso"), protector de los eslavos balcánicos.</span>
+                </div>
+              </div>
+              <div class="power-item secondary">
+                <span class="power-flag">🇷🇸 🇧🇪 🇮🇹 🇺🇸</span>
+                <div class="power-info">
+                  <strong>Aliados Clave Adicionales</strong>
+                  <span class="power-role">Serbia, Bélgica, Japón (1914), Italia (1915), Rumania (1916) y EE.UU. (1917).</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="alliance-stats">
+              <div class="stat-box">
+                <div class="stat-number">~42 Millones</div>
+                <div class="stat-label">Soldados movilizados</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-number">Superioridad</div>
+                <div class="stat-label">Acceso a recursos coloniales y control marítimo</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Triple Alianza / Imperios Centrales -->
+          <div class="alliance-column alianza-col">
+            <div class="alliance-header">
+              <div class="alliance-crest alianza"><i class="fa-solid fa-crown"></i></div>
+              <h3 class="alliance-name">LOS IMPERIOS CENTRALES</h3>
+              <div class="alliance-subname">La Triple Alianza Inicial</div>
+            </div>
+            <p class="alliance-desc">
+              Eje geopolítico situado en el corazón de Europa. Tras la deserción y cambio de bando de Italia en 1915, se consolidó en torno al liderazgo germano-austriaco.
+            </p>
+
+            <div class="powers-list">
+              <div class="power-item">
+                <span class="power-flag">🇩🇪</span>
+                <div class="power-info">
+                  <strong>Imperio Alemán</strong>
+                  <span class="power-role">La mayor potencia industrial militar de Europa continental y vanguardia técnica.</span>
+                </div>
+              </div>
+              <div class="power-item">
+                <span class="power-flag">🇦🇹-🇭🇺</span>
+                <div class="power-info">
+                  <strong>Imperio Austro-Húngaro</strong>
+                  <span class="power-role">Mosaico multiétnico de más de 11 nacionalidades bajo la dinastía Habsburgo.</span>
+                </div>
+              </div>
+              <div class="power-item">
+                <span class="power-flag">🇹🇷</span>
+                <div class="power-info">
+                  <strong>Imperio Otomano</strong>
+                  <span class="power-role">Entró en octubre de 1914, cerrando los estrechos de los Dardanelos a Rusia.</span>
+                </div>
+              </div>
+              <div class="power-item secondary">
+                <span class="power-flag">🇧🇬</span>
+                <div class="power-info">
+                  <strong>Reino de Bulgaria</strong>
+                  <span class="power-role">Se incorporó en 1915 para desquitarse de las guerras balcánicas anteriores.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="alliance-stats">
+              <div class="stat-box">
+                <div class="stat-number">~23 Millones</div>
+                <div class="stat-label">Soldados movilizados</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-number">Ventaja</div>
+                <div class="stat-label">Líneas de comunicación interiores y doctrina unificada</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Neutral Nations Card -->
+        <div class="neutrales-strip">
+          <div class="neutral-icon"><i class="fa-solid fa-flag-checkered"></i></div>
+          <div class="neutral-content">
+            <h4>Países Neutrales en Europa</h4>
+            <p>
+              <strong>España, Suiza, Países Bajos, Noruega, Suecia y Dinamarca</strong> mantuvieron su neutralidad durante toda la contienda. España vivió una fuerte fractura ideológica entre "aliadófilos" y "germanófilos", mientras su economía experimentaba un gran auge exportador seguido de inflación social.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==============================================
+         SECCIÓN 5: LA REALIDAD DEL COMBATE Y TRINCHERAS
+         ============================================== -->
+    <section id="trincheras" class="section-container trincheras-section">
+      <div class="section-inner">
+        <div class="section-header-center">
+          <span class="section-kicker"><i class="fa-solid fa-crosshairs"></i> GUERRA TOTAL Y DESHUMANIZACIÓN</span>
+          <h2 class="section-title">El Infierno del Barro: La Guerra de Trincheras</h2>
+          <p class="section-subtitle">
+            El fracaso de la guerra de movimientos rápida dio paso a una línea fortificada de 700 kilómetros desde el Mar del Norte hasta Suiza.
+          </p>
+        </div>
+
+        <!-- Interactive Aspect Cards -->
+        <div class="trincheras-grid">
+          
+          <div class="trinchera-feature-card">
+            <div class="feat-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
+            <h3>Gases Asfixiantes</h3>
+            <p>
+              Ypres (1915) presenció el primer uso masivo de gas de cloro por Alemania. Le siguieron el fosgeno y el temido <strong>gas mostaza</strong>, que quemaba pulmones, piel y ojos a través de las máscaras improvisadas.
+            </p>
+          </div>
+
+          <div class="trinchera-feature-card">
+            <div class="feat-icon"><i class="fa-solid fa-gun"></i></div>
+            <h3>La Ametralladora Defensiva</h3>
+            <p>
+              Armas como la Maxim o Vickers disparaban hasta 600 proyectiles por minuto. Hicieron suicidas las cargas de infantería a pecho descubierto y sentenciaron el fin definitivo de la caballería tradicional.
+            </p>
+          </div>
+
+          <div class="trinchera-feature-card">
+            <div class="feat-icon"><i class="fa-solid fa-shield-virus"></i></div>
+            <h3>El Horror Diario</h3>
+            <p>
+              Los soldados convivían meses con ratas, piojos, cadáveres insepultos y el continuo "pie de trinchera" por el agua estancada. Los bombardeos de artillería producían la neurosis de guerra (<em>shell shock</em>).
+            </p>
+          </div>
+
+          <div class="trinchera-feature-card">
+            <div class="feat-icon"><i class="fa-solid fa-tank"></i></div>
+            <h3>Nuevas Máquinas de Acero</h3>
+            <p>
+              El <strong>tanque británico Mark I</strong> debutó en el Somme (1916) para cruzar alambradas y zanjas. Al mismo tiempo, los aviones pasaron de simples observadores a cazas letales con ametralladoras sincronizadas.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Historical Quote Block -->
+        <div class="historical-quote-card">
+          <div class="quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+          <blockquote class="quote-text">
+            "No somos ya jóvenes. No queremos conquistar el mundo. Somos fugitivos. Huíamos de nosotros mismos; de nuestra vida. Teníamos dieciocho años y empezábamos a amar el mundo y la existencia; pero tuvimos que disparar contra ellos."
+          </blockquote>
+          <div class="quote-author">
+            <strong>Erich Maria Remarque</strong>
+            <span>— <em>Sin novedad en el frente</em> (1929), veterano alemán de las trincheras</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==============================================
+         SECCIÓN 6: TRANSFORMACIONES Y CONSECUENCIAS
+         ============================================== -->
+    <section id="consecuencias" class="section-container consecuencias-section">
+      <div class="section-inner">
+        <div class="section-header-center">
+          <span class="section-kicker"><i class="fa-solid fa-monument"></i> EL MUNDO ROTO</span>
+          <h2 class="section-title">Las Transformaciones que Provocó la Guerra</h2>
+          <p class="section-subtitle">
+            El conflicto no solo redibujó las fronteras de los continentes: destruyó un orden social centenario y forjó el siglo XX.
+          </p>
+        </div>
+
+        <div class="consecuencias-tabs-wrapper">
+          <div class="tabs-nav" id="consecuenciasTabs">
+            <button class="tab-btn active" data-tab="imperios"><i class="fa-solid fa-crown"></i> Caída de 4 Imperios</button>
+            <button class="tab-btn" data-tab="humanos"><i class="fa-solid fa-heart-crack"></i> El Costo Humano</button>
+            <button class="tab-btn" data-tab="sociedad"><i class="fa-solid fa-person-dress"></i> Rol de la Mujer</button>
+            <button class="tab-btn" data-tab="mapa"><i class="fa-solid fa-map-location-dot"></i> Versalles y el Mapa</button>
+          </div>
+
+          <div class="tabs-content" id="consecuenciasContent">
+            
+            <!-- Tab 1 -->
+            <div class="tab-panel active" id="tab-imperios">
+              <div class="panel-layout">
+                <div class="panel-text">
+                  <h3>El Derrumbe de Cuatro Dinastías Milenarias</h3>
+                  <p>
+                    Hacia finales de 1918, el mapa político que había regido Europa durante siglos había desaparecido por completo:
+                  </p>
+                  <ul class="styled-history-list">
+                    <li><strong>Imperio Ruso (Romanov):</strong> Colapsó en 1917 bajo la Revolución Bolchevique; asesinato del zar Nicolás II y nacimiento de la Unión Soviética.</li>
+                    <li><strong>Imperio Alemán (Hohenzollern):</strong> Abdicación del Káiser Guillermo II y proclamación de la frágil República de Weimar en noviembre de 1918.</li>
+                    <li><strong>Imperio Austro-Húngaro (Habsburgo):</strong> Desintegración total en múltiples repúblicas y reinos (Austria, Hungría, Checoslovaquia, Yugoslavia).</li>
+                    <li><strong>Imperio Otomano:</strong> Desmembramiento y posterior nacimiento de la República de Turquía liderada por Atatürk en 1923.</li>
+                  </ul>
+                </div>
+                <div class="panel-stat-card">
+                  <div class="card-icon-big"><i class="fa-solid fa-landmark-dome"></i></div>
+                  <div class="card-stat-val">4 Coronas</div>
+                  <div class="card-stat-desc">Desaparecieron para siempre del mapa europeo entre 1917 y 1922.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 2 -->
+            <div class="tab-panel" id="tab-humanos">
+              <div class="panel-layout">
+                <div class="panel-text">
+                  <h3>Una Generación Perdida y la Gripe de 1918</h3>
+                  <p>
+                    La escala del sufrimiento no tenía precedentes en los anales de la humanidad hasta esa fecha:
+                  </p>
+                  <ul class="styled-history-list">
+                    <li><strong>Bajas Militares:</strong> Más de <strong>9.7 millones</strong> de soldados muertos y <strong>21 millones</strong> de heridos o mutilados de por vida (<em>les gueules cassées</em>).</li>
+                    <li><strong>Bajas Civiles:</strong> Al menos <strong>10 millones</strong> de civiles fallecieron a causa del hambre, bombardeos navales y masacres.</li>
+                    <li><strong>La Pandemia de Gripe de 1918:</strong> En las trincheras y rutas de transporte desnutridas brotó la llamada "Gripe Española", que cobró entre 40 y 50 millones de vidas adicionales en todo el mundo.</li>
+                  </ul>
+                </div>
+                <div class="panel-stat-card">
+                  <div class="card-icon-big red"><i class="fa-solid fa-ribbon"></i></div>
+                  <div class="card-stat-val">> 20 Millones</div>
+                  <div class="card-stat-desc">Total estimado de vidas humanas sesgadas directamente por la guerra.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 3 -->
+            <div class="tab-panel" id="tab-sociedad">
+              <div class="panel-layout">
+                <div class="panel-text">
+                  <h3>La Emancipación Femenina y la Sociedad Movilizada</h3>
+                  <p>
+                    Con decenas de millones de hombres en el frente de batalla, la retaguardia civil dependió absolutamente del trabajo de las mujeres:
+                  </p>
+                  <ul class="styled-history-list">
+                    <li><strong>Las "Munitionettes":</strong> Cientos de miles de mujeres ingresaron a las peligrosas fábricas de armamento, manejando maquinaria pesada y pólvora.</li>
+                    <li><strong>Transporte y Servicios:</strong> Se convirtieron en conductoras de tranvías, enfermeras en primera línea, administradoras bancarias y agricultoras.</li>
+                    <li><strong>El Derecho al Voto:</strong> Esta contribución decisiva pulverizó los viejos argumentos contra el sufragio femenino, logrando el derecho a voto en el Reino Unido (1918/1928), Alemania (1918) y Estados Unidos (1920).</li>
+                  </ul>
+                </div>
+                <div class="panel-stat-card">
+                  <div class="card-icon-big gold"><i class="fa-solid fa-venus"></i></div>
+                  <div class="card-stat-val">Punto de Giro</div>
+                  <div class="card-stat-desc">Ingreso irreversible de la mujer a la economía moderna y avance del sufragio universal.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 4 -->
+            <div class="tab-panel" id="tab-mapa">
+              <div class="panel-layout">
+                <div class="panel-text">
+                  <h3>El Tratado de Versalles y las Semillas de 1939</h3>
+                  <p>
+                    Firmado el 28 de junio de 1919 (exactamente 5 años después de Sarajevo), el Tratado de Versalles impuso durísimas condiciones a Alemania:
+                  </p>
+                  <ul class="styled-history-list">
+                    <li><strong>Artículo 231 (Cláusula de Culpabilidad):</strong> Alemania fue declarada única responsable moral de la guerra.</li>
+                    <li><strong>Pérdidas Territoriales:</strong> Devolución de Alsacia y Lorena a Francia; creación del "Corredor Polaco" que aislaba Prusia Oriental.</li>
+                    <li><strong>Reparaciones Económicas Desorbitadas:</strong> Cláusulas financieras que asfixiaron la economía alemana y abonaron el caldo de cultivo para el resentimiento y el nazismo.</li>
+                    <li><strong>La Sociedad de Naciones:</strong> Creada a instancias del presidente estadounidense Woodrow Wilson, pero lastrada por la no adhesión del propio Senado de EE.UU.</li>
+                  </ul>
+                </div>
+                <div class="panel-stat-card">
+                  <div class="card-icon-big"><i class="fa-solid fa-scroll"></i></div>
+                  <div class="card-stat-val">"Una Paz Rota"</div>
+                  <div class="card-stat-desc">Foch predijo: <em>"Esto no es la paz; es un armisticio de veinte años."</em> Acertó casi al día.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ==============================================
+         SECCIÓN 7: TRIVIA HISTÓRICA / EVALUACIÓN INTERACTIVA
+         ============================================== -->
+    <section id="trivia" class="section-container trivia-section">
+      <div class="section-inner">
+        <div class="section-header-center">
+          <span class="section-kicker"><i class="fa-solid fa-brain"></i> PON A PRUEBA TU CONOCIMIENTO</span>
+          <h2 class="section-title">Desafío Histórico: La Gran Guerra</h2>
+          <p class="section-subtitle">
+            Responde las preguntas y comprueba cuánto has aprendido sobre los conceptos y acontecimientos de 1914-1918.
+          </p>
+        </div>
+
+        <div class="trivia-quiz-card" id="quizContainer">
+          
+          <!-- Progress bar inside quiz -->
+          <div class="quiz-header">
+            <span class="quiz-step-count" id="quizQuestionTracker">Pregunta 1 de 5</span>
+            <span class="quiz-score-pill" id="quizCurrentScore">Aciertos: 0</span>
+          </div>
+
+          <!-- Question content -->
+          <div class="quiz-question-box">
+            <h3 class="quiz-question-text" id="quizQuestionText">Cargando pregunta...</h3>
+            <div class="quiz-options-list" id="quizOptionsList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Question explanation & feedback -->
+          <div class="quiz-feedback-box" id="quizFeedbackBox" style="display: none;">
+            <div class="feedback-badge" id="feedbackBadge">CORRECTO</div>
+            <p class="feedback-explanation" id="feedbackExplanation"></p>
+            <button class="feedback-next-btn" id="quizNextBtn">Siguiente Pregunta <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+
+          <!-- Quiz Completion View (hidden initially) -->
+          <div class="quiz-results-box" id="quizResultsBox" style="display: none;">
+            <div class="results-crest"><i class="fa-solid fa-medal"></i></div>
+            <h3 class="results-title">¡Recorrido Histórico Completado!</h3>
+            <p class="results-score" id="resultsFinalScore">Has acertado 5 de 5 preguntas.</p>
+            <div class="results-evaluation" id="resultsBadgeTitle">Grado: Historiador Distinguido de 1914</div>
+            <p class="results-desc" id="resultsFeedbackText">
+              Has demostrado un dominio excepcional de las causas profundas, los bloques de alianzas y las transformaciones que forjaron la Europa moderna.
+            </p>
+            <button class="results-retry-btn" id="quizRetryBtn"><i class="fa-solid fa-rotate-left"></i> Reintentar Cuestionario</button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==============================================
+       FOOTER
+       ============================================== -->
+  <footer class="main-footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="brand-crest"><i class="fa-solid fa-feather-pointed"></i></div>
+          <div>
+            <h4>1914 — 1918: El Último Verano de la Paz</h4>
+            <p>Página educativa e interactiva diseñada respetando la identidad visual y fondos históricos del periodo.</p>
+          </div>
+        </div>
+        <div class="footer-back-top">
+          <a href="#hero" class="btn-scroll-top" title="Volver al inicio del recorrido">
+            <i class="fa-solid fa-arrow-up"></i>
+            <span>Volver arriba</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <div class="sources-text">
+          <strong>Referencias históricas:</strong> Christopher Clark (<em>Sonámbulos</em>), Margaret MacMillan (<em>1914: De la paz a la guerra</em>), Archivo del Imperial War Museum (IWM).
+        </div>
+        <div class="copyright-text">
+          Primera Guerra Mundial &bull; Experiencia interactiva multimedia &bull; 1914-1918
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
