@@ -1,6 +1,8 @@
-# Primera Guerra Mundial — El Último Verano de la Paz
+# Prueba-1 — Historia de Occidente
 
-Aplicación web educativa e interactiva que explora los orígenes, desarrollo y consecuencias de la Primera Guerra Mundial (1914–1918), manteniendo y respetando la identidad visual y estética histórica de época.
+## Primera Guerra Mundial: El Último Verano de la Paz
+
+Aplicación web educativa e interactiva que explora los orígenes, desarrollo y consecuencias de la Primera Guerra Mundial (1914–1918), manteniendo y respetando la identidad visual y estética histórica de época brindada en el material de referencia.
 
 ---
 
@@ -24,6 +26,7 @@ Aplicación web educativa e interactiva que explora los orígenes, desarrollo y 
 ├── styles.css       # Hoja de estilos (paleta de colores y diseño responsive)
 ├── app.js           # Lógica interactiva, navegación, audio sintetizado y trivia
 ├── README.md        # Documentación del repositorio
+├── LICENSE          # GNU Affero General Public License v3
 └── assets/          # Fondos e imágenes históricas optimizadas
     ├── hero-clean-bg.jpg
     ├── bg-no-banner.jpg
