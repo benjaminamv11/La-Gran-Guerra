@@ -1,440 +1,312 @@
-/**
- * PRIMERA GUERRA MUNDIAL: LÍNEA DE TIEMPO INTERACTIVA 1914 — 1919
- * Lógica interactiva de navegación de años, diapositivas, modales y audio
- */
+/* =============================================
+   PRIMERA GUERRA MUNDIAL - App.js
+   Lógica de la línea de tiempo interactiva
+   ============================================= */
 
-document.addEventListener('DOMContentLoaded', () => {
-  initNavbar();
-  initConceptModals();
-  initTimeline1914to1919();
-  initAmbientAudio();
-  initScrollProgress();
-});
+// === CONFIG ===
+const VIDEO_URL = ''; // Poner URL de YouTube, Google Drive o archivo local
 
-/* ==========================================================================
-   1. NAVEGACIÓN Y NAVBAR
-   ========================================================================== */
-function initNavbar() {
-  const navbar = document.getElementById('navbar');
-  const navToggle = document.getElementById('navToggle');
-  const navMenu = document.getElementById('navMenu');
-  const navLinks = document.querySelectorAll('.nav-link');
+// === SLIDE NAVIGATION ===
+const TOTAL_SLIDES = 23;
+let currentSlide = 1;
 
-  if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('mobile-open');
-    });
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        navMenu.classList.remove('mobile-open');
-      });
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-    updateActiveNavLink();
-  });
-
-  function updateActiveNavLink() {
-    const sections = document.querySelectorAll('section[id]');
-    const scrollY = window.pageYOffset;
-
-    sections.forEach(current => {
-      const sectionHeight = current.offsetHeight;
-      const sectionTop = current.offsetTop - 140;
-      const sectionId = current.getAttribute('id');
-      const activeLink = document.querySelector(`.nav-link[href*="${sectionId}"]`);
-
-      if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-        navLinks.forEach(link => link.classList.remove('active'));
-        if (activeLink) activeLink.classList.add('active');
-      }
-    });
-  }
-}
-
-/* ==========================================================================
-   2. BARRA DE PROGRESO DE LECTURA
-   ========================================================================== */
-function initScrollProgress() {
-  const progressBar = document.getElementById('scroll-progress-bar');
-  if (!progressBar) return;
-
-  window.addEventListener('scroll', () => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    progressBar.style.width = scrolled + '%';
-  });
-}
-
-/* ==========================================================================
-   3. MODALES DE CONCEPTOS (IMAGEN 2)
-   ========================================================================== */
-const CONCEPTS_DATA = {
-  imperialismo: {
-    title: 'IMPERIALISMO EN 1914',
-    badge: 'Causa Estructural',
-    desc: `Pugna voraz entre las potencias europeas por materias primas, nuevos mercados cautivos y prestigio geopolítico en África y Asia.`,
-    exampleTitle: 'Antecedentes Clave:',
-    example: `<strong>Las Crisis Marroquíes (1905 y 1911):</strong> Alemania desafió la influencia francesa en el norte de África, forzando la cooperación militar anglo-francesa previa a 1914.`
-  },
-  nacionalismo: {
-    title: 'NACIONALISMO Y EL POLVORÍN',
-    badge: 'Fuerza Desestabilizadora',
-    desc: `Sentimiento de pertenencia exaltado y rivalidad chauvinista, sumado al deseo de autodeterminación de minorías oprimidas dentro de imperios multiétnicos.`,
-    exampleTitle: 'El Escenario de los Balcanes:',
-    example: `<strong>El Paneslavismo y la Gran Serbia:</strong> Serbia aspiraba a unificar a los eslavos del sur con apoyo del Imperio Ruso, amenazando directamente a Austria-Hungría.`
-  },
-  militarismo: {
-    title: 'MILITARISMO Y PAZ ARMADA',
-    badge: 'Carrera Armamentística',
-    desc: `Aumento desmesurado de los ejércitos, flotas y presupuestos de guerra bajo la doctrina de que la fuerza bélica garantizaba la supervivencia.`,
-    exampleTitle: 'La Carrera Naval:',
-    example: `<strong>La revolución del HMS Dreadnought (1906):</strong> Acorazados con artillería pesada que desataron una competencia frenética de construcción naval anglo-alemana.`
-  },
-  alianza: {
-    title: 'EL SISTEMA DE ALIANZAS',
-    badge: 'Mecanismo de Escalada',
-    desc: `Acuerdos militares defensivos y cláusulas secretas que convirtieron cualquier disputa bilateral en una conflagración automática a escala continental.`,
-    exampleTitle: 'Efecto Dominó en Cadena:',
-    example: `<strong>Tratados Encadenados:</strong> La defensa de Serbia por Rusia activó a Francia y Alemania; la invasión de Bélgica activó al Imperio Británico.`
-  },
-  potencia: {
-    title: 'LAS GRANDES POTENCIAS',
-    badge: 'Hegemonía y Rivalidad',
-    desc: `Gran Bretaña, Alemania, Francia, Rusia, Austria-Hungría e Italia concentraban el poder industrial militar y el control de las colonias globales en 1914.`,
-    exampleTitle: 'El Dilema de Seguridad Alemán:',
-    example: `<strong>El cerco geopolítico:</strong> Berlín temía el crecimiento industrial y la modernización ferroviaria del coloso ruso, buscando un golpe rápido en Occidente.`
-  },
-  movilizacion: {
-    title: 'MOVILIZACIÓN GENERAL',
-    badge: 'El Punto Sin Retorno',
-    desc: `Preparación y despliegue irrevocable de millones de reservistas regido por horarios ferroviarios estrictos calculados al minuto.`,
-    exampleTitle: 'La Tiranía de los Trenes:',
-    example: `<strong>Punto de no retorno:</strong> Una vez ordenada la movilización rusa el 30 de julio, los planes militares alemanes impedían detener la marcha hacia la guerra.`
-  }
+// Map: which slides show the timeline bar + their year
+const TIMELINE_SLIDES = {
+  4: 1914, 5: 1914, 6: 1914, 7: 1914,
+  8: 1914, 9: 1914, 10: 1914,
+  11: 1915,
+  12: 1916,
+  13: 1917, 14: 1917,
+  15: 1918,
+  16: 1919, 17: 1919
 };
 
-function initConceptModals() {
-  const cards = document.querySelectorAll('.concepto-card');
-  const modal = document.getElementById('conceptModal');
-  const modalCloseBtn = document.getElementById('modalCloseBtn');
-  const modalDismissBtn = document.getElementById('modalDismissBtn');
-  const modalBadge = document.getElementById('modalBadge');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalBody = document.getElementById('modalBody');
+// Map: year -> first slide of that year
+const YEAR_FIRST_SLIDE = {
+  1914: 4,
+  1915: 11,
+  1916: 12,
+  1917: 13,
+  1918: 15,
+  1919: 16
+};
 
-  if (!modal) return;
+// Navigation flow (sequential order for prev/next)
+const SLIDE_ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+// Auxiliary slides not in main flow
+const AUX_SLIDES = [20, 21, 22, 23];
 
-  function openModal(conceptKey) {
-    const data = CONCEPTS_DATA[conceptKey];
-    if (!data) return;
+// === DOM ===
+const slides = document.querySelectorAll('.slide');
+const progressFill = document.getElementById('progress-bar-fill');
+const slideCounter = document.getElementById('slideCounter');
+const btnPrev = document.getElementById('btnPrev');
+const btnNext = document.getElementById('btnNext');
+const timelineBar = document.getElementById('timelineBar');
+const timelineFill = document.getElementById('timelineFill');
+const timelineYears = document.querySelectorAll('.timeline-year');
 
-    modalBadge.textContent = data.badge;
-    modalTitle.textContent = data.title;
-    modalBody.innerHTML = `
-      <p>${data.desc}</p>
-      <div class="historical-example-box">
-        <strong>${data.exampleTitle}</strong>
-        ${data.example}
+// === FUNCTIONS ===
+function goSlide(n) {
+  if (n < 1 || n > TOTAL_SLIDES) return;
+  
+  // Hide current
+  const current = document.querySelector('.slide.active');
+  if (current) current.classList.remove('active');
+  
+  // Show target
+  const target = document.querySelector(`[data-slide="${n}"]`);
+  if (target) {
+    target.classList.add('active');
+    target.scrollTop = 0; // reset scroll
+  }
+  
+  currentSlide = n;
+  updateUI();
+}
+
+function nextSlide() {
+  const idx = SLIDE_ORDER.indexOf(currentSlide);
+  if (idx !== -1 && idx < SLIDE_ORDER.length - 1) {
+    goSlide(SLIDE_ORDER[idx + 1]);
+  }
+}
+
+function prevSlide() {
+  const idx = SLIDE_ORDER.indexOf(currentSlide);
+  if (idx > 0) {
+    goSlide(SLIDE_ORDER[idx - 1]);
+  }
+}
+
+function updateUI() {
+  // Progress bar
+  const mainIdx = SLIDE_ORDER.indexOf(currentSlide);
+  const progress = mainIdx !== -1 
+    ? ((mainIdx) / (SLIDE_ORDER.length - 1)) * 100 
+    : 100;
+  progressFill.style.width = progress + '%';
+  
+  // Slide counter
+  if (mainIdx !== -1) {
+    slideCounter.textContent = `${mainIdx + 1} / ${SLIDE_ORDER.length}`;
+  } else {
+    slideCounter.textContent = '';
+  }
+  
+  // Prev/Next buttons
+  const isAux = AUX_SLIDES.includes(currentSlide);
+  if (isAux) {
+    btnPrev.style.display = 'none';
+    btnNext.style.display = 'none';
+  } else {
+    btnPrev.style.display = '';
+    btnNext.style.display = '';
+    btnPrev.disabled = (mainIdx <= 0);
+    btnNext.disabled = (mainIdx >= SLIDE_ORDER.length - 1);
+  }
+  
+  // Timeline bar
+  const year = TIMELINE_SLIDES[currentSlide];
+  if (year) {
+    timelineBar.classList.add('visible');
+    updateTimeline(year);
+  } else {
+    timelineBar.classList.remove('visible');
+  }
+}
+
+function updateTimeline(activeYear) {
+  const years = [1914, 1915, 1916, 1917, 1918, 1919];
+  const activeIdx = years.indexOf(activeYear);
+  
+  timelineYears.forEach(btn => {
+    const y = parseInt(btn.dataset.year);
+    const idx = years.indexOf(y);
+    btn.classList.remove('active', 'past');
+    if (idx === activeIdx) {
+      btn.classList.add('active');
+    } else if (idx < activeIdx) {
+      btn.classList.add('past');
+    }
+  });
+  
+  // Fill line progress
+  if (activeIdx >= 0) {
+    const pct = (activeIdx / (years.length - 1)) * 100;
+    const trackWidth = document.querySelector('.timeline-track');
+    if (trackWidth) {
+      const usableWidth = trackWidth.offsetWidth - 60; // minus padding
+      timelineFill.style.width = (usableWidth * activeIdx / (years.length - 1)) + 'px';
+    }
+  }
+}
+
+// === TIMELINE YEAR CLICKS ===
+timelineYears.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const year = parseInt(btn.dataset.year);
+    if (YEAR_FIRST_SLIDE[year]) {
+      goSlide(YEAR_FIRST_SLIDE[year]);
+    }
+  });
+});
+
+// === KEYBOARD NAVIGATION ===
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') {
+    const idx = SLIDE_ORDER.indexOf(currentSlide);
+    if (idx !== -1 && idx < SLIDE_ORDER.length - 1) {
+      goSlide(SLIDE_ORDER[idx + 1]);
+    }
+  }
+  if (e.key === 'ArrowLeft') {
+    const idx = SLIDE_ORDER.indexOf(currentSlide);
+    if (idx > 0) {
+      goSlide(SLIDE_ORDER[idx - 1]);
+    }
+  }
+  if (e.key === 'Escape') {
+    // If in aux slide, go back to slide 19
+    if (AUX_SLIDES.includes(currentSlide)) {
+      goSlide(19);
+    }
+  }
+});
+
+// === REVEAL/EXPAND TOGGLES ===
+function toggleReveal(btn) {
+  const content = btn.nextElementSibling || btn.parentElement.querySelector('.reveal-content');
+  if (!content) return;
+  
+  if (content.classList.contains('hidden')) {
+    content.classList.remove('hidden');
+    content.classList.add('visible');
+    btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Ocultar detalles';
+  } else {
+    content.classList.add('hidden');
+    content.classList.remove('visible');
+    btn.innerHTML = '<i class="fa-solid fa-eye"></i> Revelar detalles';
+  }
+}
+
+// === QUIZ ===
+const QUIZ_DATA = [
+  {
+    question: '¿Qué provocó la entrada de EE.UU. a la Gran Guerra?',
+    options: [
+      'El telegrama de Zimmermann y la guerra submarina sin restricciones.',
+      'El ataque alemán indiscriminado a navíos extranjeros.',
+      'La derrota francesa en la batalla de Verdún.',
+      'Una alianza militar firmada entre México y Alemania contra Estados Unidos.'
+    ],
+    correct: 0
+  },
+  {
+    question: '¿Qué países formaban la Triple Alianza, impulsada por Otto von Bismarck en 1882?',
+    options: [
+      'Austria-Hungría, Italia y Gran Bretaña',
+      'Alemania, Imperio Otomano y Rusia',
+      'Alemania, Austria-Hungría e Italia',
+      'Francia, Rusia y Gran Bretaña'
+    ],
+    correct: 2
+  },
+  {
+    question: '¿Por qué fue tan importante la batalla del Marne (septiembre de 1914)?',
+    options: [
+      'Puso fin a la guerra en el frente occidental.',
+      'Frustró la posibilidad de una victoria rápida alemana y cambió el rumbo del conflicto.',
+      'Provocó la entrada de Estados Unidos en la guerra.',
+      'Obligó a Rusia a firmar un armisticio.'
+    ],
+    correct: 1
+  },
+  {
+    question: '¿A qué suceso se le atribuye como la causa principal de la Primera Guerra Mundial?',
+    options: [
+      'El telegrama de Zimmermann y la guerra submarina sin restricciones.',
+      'La guerra entre la Liga Balcánica.',
+      'La derrota francesa en la guerra Franco-Prusiana.',
+      'El asesinato del archiduque Francisco Fernando.'
+    ],
+    correct: 3
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  if (!container) return;
+  
+  container.innerHTML = QUIZ_DATA.map((q, qi) => {
+    const optionsHTML = q.options.map((opt, oi) => 
+      `<div class="quiz-option" data-q="${qi}" data-o="${oi}" onclick="answerQuiz(this, ${qi}, ${oi})">
+        <div class="circle"></div>
+        <span>${opt}</span>
+      </div>`
+    ).join('');
+    
+    return `
+      <div class="quiz-question" data-q="${qi}">
+        <h4>${q.question}</h4>
+        ${optionsHTML}
+        <div class="quiz-feedback" id="feedback-${qi}"></div>
       </div>
     `;
-
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  cards.forEach(card => {
-    card.addEventListener('click', () => {
-      const conceptKey = card.getAttribute('data-concept');
-      openModal(conceptKey);
-    });
-
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        const conceptKey = card.getAttribute('data-concept');
-        openModal(conceptKey);
-      }
-    });
-  });
-
-  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
-  if (modalDismissBtn) modalDismissBtn.addEventListener('click', closeModal);
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) {
-      closeModal();
-    }
-  });
+  }).join('');
 }
 
-/* ==========================================================================
-   4. LÍNEA DE TIEMPO INTERACTIVA AÑO A AÑO (1914 — 1919)
-   ========================================================================== */
-function initTimeline1914to1919() {
-  const years = ['1914', '1915', '1916', '1917', '1918', '1919'];
-  let currentYearIndex = 0;
-
-  const yearButtons = document.querySelectorAll('.timeline-year-btn');
-  const slideCards = document.querySelectorAll('.year-slide-card');
-  const trackFill = document.getElementById('timelineTrackFill');
-  const prevBtn = document.getElementById('btnPrevYear');
-  const nextBtn = document.getElementById('btnNextYear');
-  const statusLabel = document.getElementById('timelineCurrentStatus');
-  const quickJumpButtons = document.querySelectorAll('.year-mini-btn');
-
-  function setYear(index, scrollIntoView = false) {
-    if (index < 0 || index >= years.length) return;
-    currentYearIndex = index;
-    const selectedYear = years[currentYearIndex];
-
-    // 1. Actualizar botones principales de año
-    yearButtons.forEach((btn, i) => {
-      const isActive = (i === currentYearIndex);
-      btn.classList.toggle('active', isActive);
-      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-    });
-
-    // 2. Actualizar tarjetas de diapositivas
-    slideCards.forEach(card => {
-      const cardYear = card.getAttribute('data-year');
-      card.classList.toggle('active', cardYear === selectedYear);
-    });
-
-    // 3. Actualizar barra de progreso del riel
-    if (trackFill) {
-      const progressPercent = ((currentYearIndex + 1) / years.length) * 100;
-      trackFill.style.width = `${progressPercent}%`;
-    }
-
-    // 4. Actualizar botones Anterior / Siguiente
-    if (prevBtn) prevBtn.disabled = (currentYearIndex === 0);
-    if (nextBtn) nextBtn.disabled = (currentYearIndex === years.length - 1);
-
-    // 5. Actualizar texto de estado
-    if (statusLabel) {
-      statusLabel.innerHTML = `Mostrando <strong>${selectedYear}</strong> (${currentYearIndex + 1} de ${years.length})`;
-    }
-
-    // 6. Actualizar píldoras rápidas en el navbar
-    quickJumpButtons.forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-jump-year') === selectedYear);
-    });
-
-    // 7. Desplazar suavemente a la diapositiva si se requiere
-    if (scrollIntoView) {
-      const timelineSection = document.getElementById('timeline-section');
-      if (timelineSection) {
-        timelineSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+function answerQuiz(el, qi, oi) {
+  const qBlock = el.closest('.quiz-question');
+  if (qBlock.classList.contains('answered')) return;
+  qBlock.classList.add('answered');
+  
+  const correct = QUIZ_DATA[qi].correct;
+  const options = qBlock.querySelectorAll('.quiz-option');
+  
+  options.forEach(opt => opt.classList.add('answered'));
+  
+  if (oi === correct) {
+    el.classList.add('correct');
+    document.getElementById(`feedback-${qi}`).textContent = '¡Correcto!';
+    document.getElementById(`feedback-${qi}`).className = 'quiz-feedback correct';
+  } else {
+    el.classList.add('incorrect');
+    options[correct].classList.add('correct');
+    document.getElementById(`feedback-${qi}`).textContent = 'Incorrecto';
+    document.getElementById(`feedback-${qi}`).className = 'quiz-feedback incorrect';
   }
-
-  // Event listeners para los botones de la barra de años
-  yearButtons.forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-      setYear(index);
-    });
-  });
-
-  // Botón Año Anterior
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      if (currentYearIndex > 0) {
-        setYear(currentYearIndex - 1);
-      }
-    });
-  }
-
-  // Botón Año Siguiente
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (currentYearIndex < years.length - 1) {
-        setYear(currentYearIndex + 1);
-      }
-    });
-  }
-
-  // Píldoras del Header (salto directo)
-  quickJumpButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const y = btn.getAttribute('data-jump-year');
-      const idx = years.indexOf(y);
-      if (idx !== -1) {
-        setYear(idx, true);
-      }
-    });
-  });
-
-  // Navegación por teclado (Flechas izquierda y derecha)
-  window.addEventListener('keydown', (e) => {
-    const timelineEl = document.getElementById('timeline-section');
-    if (!timelineEl) return;
-    
-    const rect = timelineEl.getBoundingClientRect();
-    const inViewport = (rect.top < window.innerHeight && rect.bottom > 0);
-    if (!inViewport) return;
-
-    if (e.key === 'ArrowRight' && currentYearIndex < years.length - 1) {
-      setYear(currentYearIndex + 1);
-    } else if (e.key === 'ArrowLeft' && currentYearIndex > 0) {
-      setYear(currentYearIndex - 1);
-    }
-  });
-
-  // Inicializar en 1914
-  setYear(0);
 }
 
-/* ==========================================================================
-   5. AMBIENTACIÓN SONORA (WEB AUDIO API)
-   Genera viento y lluvia tenue sin archivos de audio externos
-   ========================================================================== */
-function initAmbientAudio() {
-  const audioBtn = document.getElementById('ambient-audio-btn');
-  const audioIcon = document.getElementById('audio-icon');
-  const btnText = audioBtn ? audioBtn.querySelector('.audio-btn-text') : null;
-
-  if (!audioBtn) return;
-
-  let audioCtx = null;
-  let isPlaying = false;
-  let masterGain = null;
-  let noiseNode = null;
-  let rumbleInterval = null;
-
-  function createPinkNoiseBuffer(ctx) {
-    const bufferSize = ctx.sampleRate * 2;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-
-    for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      b0 = 0.99886 * b0 + white * 0.0555179;
-      b1 = 0.99332 * b1 + white * 0.0750759;
-      b2 = 0.96900 * b2 + white * 0.1538520;
-      b3 = 0.86650 * b3 + white * 0.3104856;
-      b4 = 0.55000 * b4 + white * 0.5329522;
-      b5 = -0.7616 * b5 - white * 0.0168980;
-      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.08;
-      b6 = white * 0.115926;
-    }
-    return buffer;
+// === VIDEO ===
+function buildVideo() {
+  const container = document.getElementById('videoContainer');
+  if (!container || !VIDEO_URL) return;
+  
+  const u = VIDEO_URL.trim();
+  if (!u) return;
+  
+  if (/youtu\.be|youtube\.com/.test(u)) {
+    const m = u.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
+    container.innerHTML = `<iframe src="https://www.youtube.com/embed/${m ? m[1] : ''}" allow="accelerometer;autoplay;encrypted-media;picture-in-picture" allowfullscreen></iframe>`;
+  } else if (/drive\.google\.com/.test(u)) {
+    container.innerHTML = `<iframe src="${u.replace(/\/view.*$/, '/preview')}" allow="autoplay;fullscreen" allowfullscreen></iframe>`;
+  } else {
+    container.innerHTML = `<video controls preload="metadata" src="${u}"></video>`;
   }
-
-  function startAudio() {
-    try {
-      const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtxClass) return;
-
-      audioCtx = new AudioCtxClass();
-      masterGain = audioCtx.createGain();
-      masterGain.gain.setValueAtTime(0.01, audioCtx.currentTime);
-      masterGain.gain.exponentialRampToValueAtTime(0.16, audioCtx.currentTime + 2.0);
-      masterGain.connect(audioCtx.destination);
-
-      // Lluvia/Viento continuo
-      const noiseBuffer = createPinkNoiseBuffer(audioCtx);
-      noiseNode = audioCtx.createBufferSource();
-      noiseNode.buffer = noiseBuffer;
-      noiseNode.loop = true;
-
-      const lowpass = audioCtx.createBiquadFilter();
-      lowpass.type = 'lowpass';
-      lowpass.frequency.setValueAtTime(600, audioCtx.currentTime);
-
-      noiseNode.connect(lowpass);
-      lowpass.connect(masterGain);
-      noiseNode.start(0);
-
-      // Retumbe lejano
-      function triggerRumble() {
-        if (!isPlaying || !audioCtx) return;
-
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        const filter = audioCtx.createBiquadFilter();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(45 + Math.random() * 25, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 2.8);
-
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(80, audioCtx.currentTime);
-
-        gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.12, audioCtx.currentTime + 0.5);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.0);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(masterGain);
-
-        osc.start(audioCtx.currentTime);
-        osc.stop(audioCtx.currentTime + 3.2);
-
-        rumbleInterval = setTimeout(triggerRumble, 8000 + Math.random() * 12000);
-      }
-
-      triggerRumble();
-
-      isPlaying = true;
-      audioBtn.classList.add('playing');
-      audioIcon.className = 'fa-solid fa-volume-high';
-      if (btnText) btnText.textContent = 'Sonido: Activado';
-    } catch (e) {
-      console.warn('Audio no disponible:', e);
-    }
-  }
-
-  function stopAudio() {
-    if (!audioCtx) return;
-    if (rumbleInterval) clearTimeout(rumbleInterval);
-
-    if (masterGain) {
-      masterGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
-      setTimeout(() => {
-        if (noiseNode) {
-          try { noiseNode.stop(); } catch (err) {}
-        }
-        if (audioCtx && audioCtx.state !== 'closed') {
-          audioCtx.close();
-        }
-        audioCtx = null;
-      }, 700);
-    }
-
-    isPlaying = false;
-    audioBtn.classList.remove('playing');
-    audioIcon.className = 'fa-solid fa-volume-xmark';
-    if (btnText) btnText.textContent = 'Sonido Ambiental';
-  }
-
-  audioBtn.addEventListener('click', () => {
-    if (isPlaying) {
-      stopAudio();
-    } else {
-      startAudio();
-    }
-  });
 }
+
+// === INIT ===
+function init() {
+  buildQuiz();
+  buildVideo();
+  goSlide(1);
+}
+
+// Window resize: update timeline fill
+window.addEventListener('resize', () => {
+  const year = TIMELINE_SLIDES[currentSlide];
+  if (year) updateTimeline(year);
+});
+
+init();
