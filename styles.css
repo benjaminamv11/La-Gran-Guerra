@@ -256,6 +256,22 @@ html, body {
   justify-content: flex-end;
   margin-top: 18px;
 }
+/* Anterior a la izquierda y Continuar a la derecha, en la misma línea */
+.slide-nav-both {
+  justify-content: space-between;
+  align-items: center;
+}
+/* Anterior con contorno; mismo alto que Continuar (el borde se resta del padding) */
+.btn-anterior.ghost {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  padding: calc(9px - 1.5px) calc(22px - 1.5px);
+}
+.btn-anterior.ghost:hover {
+  background: transparent;
+  border-color: #e05a47;
+  color: #e05a47;
+}
 
 /* === HEADINGS & LABELS === */
 .section-title {
@@ -1152,11 +1168,13 @@ h4.red, .red { color: #c43c3c; }
   color: #e05a47;
 }
 
-/* Portada: sin barra inferior y contenido centrado en toda la pantalla */
-body.is-cover #bottom-bar {
+/* Portada y diapositivas 2-3: sin barra inferior; la navegación va dentro de la diapositiva */
+body.no-bottom-bar #bottom-bar {
   display: none;
 }
-body.is-cover .slide[data-slide="1"] {
+body.no-bottom-bar .slide[data-slide="1"],
+body.no-bottom-bar .slide[data-slide="2"],
+body.no-bottom-bar .slide[data-slide="3"] {
   padding-bottom: 0;
 }
 

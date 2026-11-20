@@ -35,6 +35,8 @@ const YEAR_FIRST_SLIDE = {
 const SLIDE_ORDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
 // Auxiliary slides not in main flow
 const AUX_SLIDES = [20, 21, 22, 23];
+// Slides sin barra inferior (portada + conceptos + protagonistas)
+const NO_BAR_SLIDES = [1, 2, 3];
 
 // === DOM ===
 const slides = document.querySelectorAll('.slide');
@@ -94,8 +96,8 @@ function updateUI() {
     slideCounter.textContent = '';
   }
   
-  // Portada (slide 1): sin barra inferior de navegación
-  document.body.classList.toggle('is-cover', currentSlide === 1);
+  // Portada y diapositivas 2-3: sin barra inferior (llevan sus propios botones)
+  document.body.classList.toggle('no-bottom-bar', NO_BAR_SLIDES.includes(currentSlide));
 
   // Prev/Next buttons
   const isAux = AUX_SLIDES.includes(currentSlide);
