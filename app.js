@@ -155,8 +155,35 @@ timelineYears.forEach(btn => {
   });
 });
 
+// === LIGHTBOX (imagen ampliada) ===
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxCaption = document.getElementById('lightboxCaption');
+let lightboxOpener = null;
+
+function openLightbox(img) {
+  if (!img) return;
+  lightboxOpener = document.activeElement;
+  lightboxImg.src = img.currentSrc || img.src;
+  lightboxImg.alt = img.alt;
+  lightboxCaption.textContent = img.alt;
+  lightbox.classList.add('open');
+  lightbox.querySelector('.lightbox-close').focus();
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  if (lightboxOpener && lightboxOpener.focus) lightboxOpener.focus();
+  lightboxOpener = null;
+}
+
 // === KEYBOARD NAVIGATION ===
 document.addEventListener('keydown', (e) => {
+  // Con la imagen ampliada abierta, solo Escape actúa (cierra) y se bloquea la navegación
+  if (lightbox.classList.contains('open')) {
+    if (e.key === 'Escape') closeLightbox();
+    return;
+  }
   if (e.key === 'ArrowRight') {
     const idx = SLIDE_ORDER.indexOf(currentSlide);
     if (idx !== -1 && idx < SLIDE_ORDER.length - 1) {

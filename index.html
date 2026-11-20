@@ -194,7 +194,12 @@
             <p class="alianzas-text">Buscaban proteger sus intereses y defenderse de posibles agresiones. Estas alianzas dividieron Europa y provocaron que un conflicto local pudiera involucrar a varias potencias.</p>
           </div>
           <div class="alianzas-right">
-            <img src="assets/mapa-alianzas.jpg" alt="Mapa de las Alianzas en Europa 1914-1915" class="content-img map-img">
+            <div class="img-expandable">
+              <img src="assets/mapa-alianzas.jpg" alt="Mapa de las Alianzas en Europa 1914-1915" class="content-img map-img" onclick="openLightbox(this)">
+              <button type="button" class="btn-expand" onclick="openLightbox(this.previousElementSibling)" aria-label="Expandir mapa">
+                <i class="fa-solid fa-expand"></i> Expandir mapa
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -664,6 +669,17 @@
     </section>
 
   </div><!-- /slideshow -->
+
+  <!-- ============================================
+       VISOR DE IMAGEN AMPLIADA (LIGHTBOX)
+       ============================================ -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada" onclick="closeLightbox()">
+    <button type="button" class="lightbox-close" onclick="closeLightbox()" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+    <figure class="lightbox-figure" onclick="event.stopPropagation()">
+      <img id="lightboxImg" src="" alt="">
+      <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+  </div>
 
   <!-- ============================================
        BARRA INFERIOR: NAVEGACIÓN + LÍNEA DE TIEMPO
