@@ -1062,6 +1062,14 @@ h4.red, .red { color: #c43c3c; }
   color: #e05a47;
 }
 
+/* Portada: sin barra inferior y contenido centrado en toda la pantalla */
+body.is-cover #bottom-bar {
+  display: none;
+}
+body.is-cover .slide[data-slide="1"] {
+  padding-bottom: 0;
+}
+
 /* === TIMELINE BAR === */
 .timeline-bar {
   display: none;

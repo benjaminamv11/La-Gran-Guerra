@@ -94,6 +94,9 @@ function updateUI() {
     slideCounter.textContent = '';
   }
   
+  // Portada (slide 1): sin barra inferior de navegación
+  document.body.classList.toggle('is-cover', currentSlide === 1);
+
   // Prev/Next buttons
   const isAux = AUX_SLIDES.includes(currentSlide);
   if (isAux) {
